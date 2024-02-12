@@ -3,6 +3,7 @@ package com.example.taskManager.services;
 import com.example.taskManager.model.Task;
 import com.example.taskManager.model.TaskStatus;
 import com.example.taskManager.repositories.TaskRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +44,10 @@ public class TaskService {
 
     public List<Task> findTasksByStatus(TaskStatus status) {
         return taskRepo.findByStatus(status);
+    }
+
+
+    public void deleteTaskById(Long id) {
+        taskRepo.deleteById(id);
     }
 }

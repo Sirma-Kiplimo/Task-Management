@@ -21,16 +21,19 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+//    get all tasks
     @GetMapping
     public List<Task> getAllTasks (){
         return taskService.findAllTasks();
     }
 
+//    Create a task
     @PostMapping
     public Task createTask (@RequestBody Task task){
         return taskService.saveTask(task);
     }
 
+//    Get a task by Id
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
         return taskService.findTaskById(id)
@@ -46,6 +49,10 @@ public class TaskController {
     @GetMapping("/status/{status}")
     public List<Task> getTasksByStatus(@PathVariable TaskStatus status) {
         return taskService.findTasksByStatus(status);
+    }
+    @DeleteMapping(("{id}"))
+    public void deletetask(@PathVariable Long id){
+        taskService.deleteTaskById(id);
     }
 
 }

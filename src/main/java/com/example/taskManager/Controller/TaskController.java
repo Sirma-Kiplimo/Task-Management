@@ -41,18 +41,29 @@ public class TaskController {
                 .orElseGet(()-> ResponseEntity.notFound().build());
     }
 
+//    updating the task status using patch since it is one field
     @PatchMapping("/{id}/status")
     public Task updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
         return taskService.updateTaskStatus(id, status);
     }
 
+
+//    getting a task by  status
     @GetMapping("/status/{status}")
     public List<Task> getTasksByStatus(@PathVariable TaskStatus status) {
         return taskService.findTasksByStatus(status);
     }
-    @DeleteMapping(("{id}"))
+
+//    Delete a tsk by id
+    @DeleteMapping("{id}")
     public void deletetask(@PathVariable Long id){
         taskService.deleteTaskById(id);
     }
 
+//    deleting all Tasks
+
+    @DeleteMapping("/all")
+    public void deleteTasks(){
+        taskService.deleteAll();
+    }
 }

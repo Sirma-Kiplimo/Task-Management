@@ -50,4 +50,8 @@ public class TaskService {
     public void deleteTaskById(Long id) {
         taskRepo.deleteById(id);
     }
+
+    public void deleteAll() {
+        taskRepo.deleteAll();
+    }
 }

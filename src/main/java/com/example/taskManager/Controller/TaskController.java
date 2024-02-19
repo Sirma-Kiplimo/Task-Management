@@ -42,11 +42,18 @@ public class TaskController {
     }
 
 //    updating the task status using patch since it is one field
-    @PatchMapping("/{id}/status")
+//    @PatchMapping("/{id}/status")
+//    public Task updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
+//        return taskService.updateTaskStatus(id, status);
+//    }
+
+
+//    updating the task status using put method
+
+    @PutMapping("/{id}/status")
     public Task updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
         return taskService.updateTaskStatus(id, status);
     }
-
 
 //    getting a task by  status
     @GetMapping("/status/{status}")

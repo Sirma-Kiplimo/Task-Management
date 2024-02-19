@@ -31,16 +31,29 @@ public class TaskService {
         return taskRepo.findById(id);
     }
 
+
+//    This means that Spring takes care of starting a transaction before the method execution and committing the transaction
+//    if the method completes successfully, or rolling it back if there is an exception.
+    @Transactional
     public Task updateTaskStatus(Long id, TaskStatus status) {
-        Optional<Task> taskOptional = taskRepo.findById(id);
-        if (taskOptional.isPresent()) {
-            Task task = taskOptional.get();
-            task.setStatus(status);
-            return taskRepo.save(task);
-        } else {
-            throw new RuntimeException("Task not found with id " + id);
-        }
+        Task task = taskRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+        task.setStatus(status);
+        return taskRepo.save(task);
     }
+
+//    @Transactional
+//    public Task updateTaskStatus(Long id, TaskStatus status) {
+//        Optional<Task> taskOptional = taskRepo.findById(id);
+//        if (taskOptional.isPresent()) {
+//            Task task = taskOptional.get();
+//            task.setStatus(status);
+//            return taskRepo.save(task);
+//        } else {
+//            throw new RuntimeException("Task not found with id " + id);
+//        }
+//
+//    }
 
     public List<Task> findTasksByStatus(TaskStatus status) {
         return taskRepo.findByStatus(status);

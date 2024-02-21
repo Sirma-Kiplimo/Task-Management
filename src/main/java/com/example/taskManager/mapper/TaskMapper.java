@@ -4,7 +4,7 @@ import com.example.taskManager.dto.TaskDTO;
 import com.example.taskManager.model.Task;
 
 public class TaskMapper {
-    public static TaskDTO MapToDto(Task task) {
+    public static TaskDTO mapToDto(Task task) {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setName(task.getName());
         taskDTO.setDescription(task.getDescription());

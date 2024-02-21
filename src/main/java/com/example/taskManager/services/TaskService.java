@@ -1,48 +1,84 @@
 package com.example.taskManager.services;
 
-import com.example.taskManager.model.ResponseMessage;
+import com.example.taskManager.dto.TaskDTO;
+import com.example.taskManager.mapper.TaskMapper;
 import com.example.taskManager.model.Task;
-import com.example.taskManager.model.TaskStatus;
 import com.example.taskManager.repositories.TaskRepo;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
-    private final TaskRepo taskRepo;
 
     @Autowired
-    public TaskService(TaskRepo taskRepo) {
-        this.taskRepo = taskRepo;
+    private TaskRepo taskRepo;
+
+
+    public List<TaskDTO> findAllTasks() {
+        return  taskRepo.findAll()
+                .stream()
+                .map(TaskMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Task> findAllTasks() {
-        return taskRepo.findAll();
+    public TaskDTO saveTask(TaskDTO taskDTO) {
+        Task task = TaskMapper.mapToTask(taskDTO);
+        Task savedTask = taskRepo.save(task);
+        return TaskMapper.mapToDto(savedTask);
     }
+}
 
-    public Task saveTask(Task task) {
-        return taskRepo.save(task);
-    }
+//    private final TaskRepo taskRepo;
+//
+//    @Autowired
+//    public TaskService(TaskRepo taskRepo) {
+//        this.taskRepo = taskRepo;
+//    }
+//
+//    public List<Task> findAllTasks() {
+//        return taskRepo.findAll();
+//    }
+//
+//    public Task saveTask(Task task) {
+//        return taskRepo.save(task);
+//    }
+//
+//    public Optional<Task> findTaskById(Long id) {
+//        return taskRepo.findById(id);
+//    }
+//
+//
+////    This means that Spring takes care of starting a transaction before the method execution and committing the transaction
+////    if the method completes successfully, or rolling it back if there is an exception.
+//
+//    @Transactional
+//    public Task updateTaskStatus(Long id, TaskStatus status) {
+//        Task task = taskRepo.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+//        task.setStatus(status);
+//        return taskRepo.save(task);
+//    }
+//
+//
+//
+//    public List<Task> findTasksByStatus(TaskStatus status) {
+//        return taskRepo.findByStatus(status);
+//    }
+//
+//
+//    public void deleteTaskById(Long id) {
+//        taskRepo.deleteById(id);
+//    }
+//
+//    public void deleteAll() {
+//        taskRepo.deleteAll();
+//    }
+//}
 
-    public Optional<Task> findTaskById(Long id) {
-        return taskRepo.findById(id);
-    }
 
-
-//    This means that Spring takes care of starting a transaction before the method execution and committing the transaction
-//    if the method completes successfully, or rolling it back if there is an exception.
-
-    @Transactional
-    public Task updateTaskStatus(Long id, TaskStatus status) {
-        Task task = taskRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
-        task.setStatus(status);
-        return taskRepo.save(task);
-    }
 
 
 //    @Transactional
@@ -54,19 +90,6 @@ public class TaskService {
 //        return new ResponseMessage(updatedTask, "Task status updated successfully");
 //    }
 
-    public List<Task> findTasksByStatus(TaskStatus status) {
-        return taskRepo.findByStatus(status);
-    }
-
-
-    public void deleteTaskById(Long id) {
-        taskRepo.deleteById(id);
-    }
-
-    public void deleteAll() {
-        taskRepo.deleteAll();
-    }
-}
 
 //    @Transactional
 //    public Task updateTaskStatus(Long id, TaskStatus status) {

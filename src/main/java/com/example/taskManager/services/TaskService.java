@@ -32,11 +32,18 @@ public class TaskService {
         return TaskMapper.mapToDto(savedTask);
     }
 
-    public Optional<Task> findTaskById(Long id) {
-        return taskRepo.findById(id);
+    public Optional<TaskDTO> findTaskById(Long id) {
+        return taskRepo.findById(id)
+                .map(TaskMapper::mapToDto);
     }
 
 
+    public TaskDTO updateTaskStatus(Long id, TaskStatus status) {
+        Task task = taskRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+        task.setStatus(status);
+        return TaskMapper.mapToDto((taskRepo.save(task)));
+    }
 }
 
 //    private final TaskRepo taskRepo;

@@ -45,9 +45,21 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         return taskService.findTaskById(id)
-                .map(TaskMapper::mapToDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    /**
+     * Update a task status
+     */
+//    @PutMapping("/{id}/status")
+//    public TaskDTO updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
+//        Task updatedTask = taskService.updateTaskStatus(id, status);
+//        return TaskMapper.toDTO(updatedTask);
+//    }
+
+    @PutMapping("/{id}/status")
+    public TaskDTO updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
+        return taskService.updateTaskStatus(id, status);
     }
 
 }

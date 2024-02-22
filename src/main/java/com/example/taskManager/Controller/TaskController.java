@@ -2,7 +2,6 @@ package com.example.taskManager.Controller;
 
 import com.example.taskManager.dto.TaskDTO;
 import com.example.taskManager.mapper.TaskMapper;
-import com.example.taskManager.model.Task;
 import com.example.taskManager.model.TaskStatus;
 import com.example.taskManager.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -19,7 +17,6 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
-
 
 
     /**
@@ -40,8 +37,20 @@ public class TaskController {
         return taskService.saveTask(taskDTO);
     }
 
+    /**
+     * getting a task
+     * By Id
+     */
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+        return taskService.findTaskById(id)
+                .map(TaskMapper::mapToDto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+}
 
 //    private final TaskService taskService;
 //

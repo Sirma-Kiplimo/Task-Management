@@ -3,11 +3,13 @@ package com.example.taskManager.services;
 import com.example.taskManager.dto.TaskDTO;
 import com.example.taskManager.mapper.TaskMapper;
 import com.example.taskManager.model.Task;
+import com.example.taskManager.model.TaskStatus;
 import com.example.taskManager.repositories.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +31,12 @@ public class TaskService {
         Task savedTask = taskRepo.save(task);
         return TaskMapper.mapToDto(savedTask);
     }
+
+    public Optional<Task> findTaskById(Long id) {
+        return taskRepo.findById(id);
+    }
+
+
 }
 
 //    private final TaskRepo taskRepo;

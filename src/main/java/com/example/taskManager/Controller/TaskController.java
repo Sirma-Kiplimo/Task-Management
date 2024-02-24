@@ -29,6 +29,8 @@ public class TaskController {
         return taskService.findAllTasks();
     }
 
+
+
     /**
      * adding a task
      */
@@ -37,30 +39,32 @@ public class TaskController {
         return taskService.saveTask(taskDTO);
     }
 
+
+
     /**
      * getting a task
      * By Id
      */
-
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         return taskService.findTaskById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
     /**
      * Update a task status
      */
-//    @PutMapping("/{id}/status")
-//    public TaskDTO updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
-//        Task updatedTask = taskService.updateTaskStatus(id, status);
-//        return TaskMapper.toDTO(updatedTask);
-//    }
-
     @PutMapping("/{id}/status")
     public TaskDTO updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
         return taskService.updateTaskStatus(id, status);
     }
+
+    /**
+     * Getting a task by status
+     */
+
 
 }
 
@@ -97,6 +101,7 @@ public class TaskController {
 //    public Task updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
 //        return taskService.updateTaskStatus(id, status);
 //    }
+
 //
 ////    getting a task by  status
 //    @GetMapping("/status/{status}")

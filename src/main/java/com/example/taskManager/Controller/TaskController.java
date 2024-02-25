@@ -64,6 +64,11 @@ public class TaskController {
     /**
      * Getting a task by status
      */
+    @GetMapping("/status/{status}")
+    public List<TaskDTO> getTasksByStatus(@PathVariable TaskStatus status) {
+        return taskService.findTasksByStatus(status);
+    }
+
 
 
 }

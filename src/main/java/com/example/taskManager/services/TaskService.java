@@ -44,6 +44,13 @@ public class TaskService {
         task.setStatus(status);
         return TaskMapper.mapToDto((taskRepo.save(task)));
     }
+
+    public List<TaskDTO> findTasksByStatus(TaskStatus status) {
+        List<Task> tasks = taskRepo.findByStatus(status);
+        return tasks.stream()
+                .map(TaskMapper::mapToDto) // Convert Task to TaskDTO
+                .collect(Collectors.toList());
+    }
 }
 
 //    private final TaskRepo taskRepo;

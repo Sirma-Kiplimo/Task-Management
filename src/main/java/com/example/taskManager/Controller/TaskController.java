@@ -69,6 +69,21 @@ public class TaskController {
         return taskService.findTasksByStatus(status);
     }
 
+    /**
+     * Deleting a task by id
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
+        taskService.deleteTaskById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    //    deleting all Tasks
+    @DeleteMapping("/all")
+    public void deleteTasks(){
+        taskService.deleteAllTasks();
+    }
+
 
 
 }

@@ -51,6 +51,14 @@ public class TaskService {
                 .map(TaskMapper::mapToDto) // Convert Task to TaskDTO
                 .collect(Collectors.toList());
     }
+
+
+    public void deleteTaskById(Long id) {
+        taskRepo.deleteById(id);
+    }
+    public void deleteAllTasks() {
+        taskRepo.deleteAll();
+    }
 }
 
 //    private final TaskRepo taskRepo;

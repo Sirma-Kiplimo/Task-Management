@@ -4,6 +4,7 @@ import com.example.taskManager.dto.TaskDTO;
 import com.example.taskManager.mapper.TaskMapper;
 import com.example.taskManager.model.TaskStatus;
 import com.example.taskManager.services.TaskService;
+import com.example.taskManager.wrappers.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,9 @@ public class TaskController {
      * tasks
      */
     @GetMapping
-    public List<TaskDTO> getAllTasks() {
-        return taskService.findAllTasks();
+    public ResponseWrapper getAllTasks() {
+        List<TaskDTO> tasks = taskService.findAllTasks();
+        return new ResponseWrapper(true, "Tasks retrieved successfully", tasks);
     }
 
 
@@ -35,9 +37,11 @@ public class TaskController {
      * adding a task
      */
     @PostMapping
-    public TaskDTO createTask(@RequestBody TaskDTO taskDTO) {
-        return taskService.saveTask(taskDTO);
+    public ResponseWrapper createTask(@RequestBody TaskDTO taskDTO) {
+        TaskDTO createdTask = taskService.saveTask(taskDTO);
+        return new ResponseWrapper(true, "Task created successfully", createdTask);
     }
+
 
 
 
@@ -46,10 +50,10 @@ public class TaskController {
      * By Id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+    public ResponseWrapper getTaskById(@PathVariable Long id) {
         return taskService.findTaskById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .map(taskDTO -> new ResponseWrapper(true, "Task retrieved successfully", taskDTO))
+                .orElse(new ResponseWrapper(false, "Task not found", null));
     }
 
 
@@ -57,31 +61,42 @@ public class TaskController {
      * Update a task status
      */
     @PutMapping("/{id}/status")
-    public TaskDTO updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
-        return taskService.updateTaskStatus(id, status);
+    public ResponseWrapper updateTaskStatus(@PathVariable Long id, @RequestBody TaskStatus status) {
+        try {
+            TaskDTO updatedTask = taskService.updateTaskStatus(id, status);
+            return new ResponseWrapper(true, "Task status updated successfully", updatedTask);
+        } catch (RuntimeException ex) {
+            return new ResponseWrapper(false, "Task not found", null);
+        }
     }
 
     /**
      * Getting a task by status
      */
     @GetMapping("/status/{status}")
-    public List<TaskDTO> getTasksByStatus(@PathVariable TaskStatus status) {
-        return taskService.findTasksByStatus(status);
+    public ResponseWrapper getTasksByStatus(@PathVariable TaskStatus status) {
+        List<TaskDTO> tasks = taskService.findTasksByStatus(status);
+        return new ResponseWrapper(true, "Tasks retrieved successfully", tasks);
     }
 
     /**
      * Deleting a task by id
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
-        taskService.deleteTaskById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseWrapper deleteTaskById(@PathVariable Long id) {
+        try {
+            taskService.deleteTaskById(id);
+            return new ResponseWrapper(true, "Task deleted successfully", null);
+        } catch (RuntimeException ex) {
+            return new ResponseWrapper(false, "Task not found", null);
+        }
     }
 
     //    deleting all Tasks
     @DeleteMapping("/all")
-    public void deleteTasks(){
+    public ResponseWrapper deleteTasks() {
         taskService.deleteAllTasks();
+        return new ResponseWrapper(true, "All tasks deleted successfully", null);
     }
 
 
